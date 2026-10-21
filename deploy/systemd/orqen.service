@@ -1,0 +1,25 @@
+# systemd user unit for Orqen.
+# Install:
+#   install -Dm755 target/release/orqen ~/.local/bin/orqen
+#   install -Dm644 deploy/systemd/orqen.service ~/.config/systemd/user/orqen.service
+#   systemctl --user daemon-reload && systemctl --user enable --now orqen
+# Logs: journalctl --user -u orqen (no secrets are logged).
+
+[Unit]
+Description=Orqen loopback gateway (OpenCode Go native forwarding)
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/orqen --config %h/.config/orqen/orqen.toml
+Environment=ORQEN_LOG=info
+Restart=on-failure
+RestartSec=5
+# SIGTERM starts a graceful drain bounded by limits.shutdown_drain_secs
+# (default 30); keep this above it.
+KillSignal=SIGTERM
+TimeoutStopSec=45
+UMask=0077
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=default.target

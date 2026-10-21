@@ -1,0 +1,15 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+config.yaml
+logs/
+scratch/
+target/
+dist/
+build/
+*.log
+orqen.toml
+keys/
+*.key
+.omo/

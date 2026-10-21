@@ -1,0 +1,49 @@
+name: Provider request
+description: Propose a new model provider for Orqen.
+labels: ["provider"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        See docs/provider-expansion.md for the criteria a provider has to meet.
+  - type: input
+    id: provider
+    attributes:
+      label: Provider
+      placeholder: Name and link to its API docs
+    validations:
+      required: true
+  - type: dropdown
+    id: auth
+    attributes:
+      label: Authentication
+      options:
+        - Documented API key
+        - Other (explain below)
+    validations:
+      required: true
+  - type: checkboxes
+    id: protocols
+    attributes:
+      label: Compatible protocols
+      options:
+        - label: OpenAI Chat Completions
+        - label: OpenAI Responses
+        - label: Anthropic Messages
+  - type: textarea
+    id: limits
+    attributes:
+      label: Limit responses
+      description: What the provider returns when a key, account or model hits a limit, and whether it sends Retry-After.
+  - type: textarea
+    id: session
+    attributes:
+      label: Conversation or cache affinity header
+      description: Header name, if the provider uses one.
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Terms
+      options:
+        - label: The provider's terms allow sending my own traffic through a self-hosted proxy.
+          required: true

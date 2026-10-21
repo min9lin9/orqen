@@ -1,0 +1,45 @@
+name: Bug report
+description: Something in Orqen does not work as documented.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Never paste API keys or key file contents. For security issues, use the repository's Security tab instead.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: The request you sent (curl is ideal) and the client you used.
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Config (redacted)
+      description: Your orqen.toml without secrets.
+      render: toml
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log lines
+      description: Run with `ORQEN_LOG=debug` and paste the lines around the failure.
+      render: text
+  - type: input
+    id: version
+    attributes:
+      label: Orqen version or commit
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS and architecture
+      placeholder: Ubuntu 24.04 x86_64

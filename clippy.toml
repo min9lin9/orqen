@@ -1,0 +1,4 @@
+# Production code denies unwrap/expect (Cargo.toml [lints.clippy]); unit
+# tests may use them for fixture setup.
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true

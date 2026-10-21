@@ -1,0 +1,55 @@
+# Orqen example configuration.
+# Copy to ~/.config/orqen/orqen.toml (or pass --config PATH).
+# Secrets never live in this file: each [[keys]] entry points at a key file
+# (chmod 600) holding exactly one OpenCode Go API key. Relative paths are
+# resolved against this file's directory.
+
+# Loopback only; non-loopback addresses are rejected at startup.
+listen = "127.0.0.1:8790"
+
+[upstream]
+# Injectable for loopback testing (http is accepted only for loopback hosts).
+base_url = "https://opencode.ai/inference/go"
+connect_timeout_secs = 10
+# Non-streaming requests return headers only after completion.
+response_header_timeout_secs = 600
+# Maximum silence between two upstream body chunks.
+stream_idle_timeout_secs = 300
+# Attempts per request, same model, different eligible key, pre-commit only.
+max_attempts = 3
+
+[limits]
+max_request_bytes = 33554432
+request_read_timeout_secs = 60
+shutdown_drain_secs = 30
+# Used when a 429/402 carries no Retry-After.
+default_cooldown_secs = 60
+# 401: only the failing credential is disabled for this long.
+auth_failure_cooldown_secs = 600
+max_cooldown_secs = 86400
+# "account": a 429 blocks the whole scope (all keys, all models).
+# "model":   a 429 blocks only (scope, requested model).
+rate_limit_scope = "account"
+max_model_cooldowns = 1024
+
+[session]
+# First present header wins; forwarded upstream as x-opencode-session.
+headers = ["x-opencode-session", "x-omo-session", "x-session-id", "session_id"]
+# "ephemeral": mint a one-off ID per request; "reject": answer 400.
+missing = "ephemeral"
+
+# Two keys on the same account: same scope, so they share one cooldown.
+[[keys]]
+id = "go-personal-1"
+key_file = "keys/go-personal-1.key"
+scope = "account-personal"
+
+[[keys]]
+id = "go-personal-2"
+key_file = "keys/go-personal-2.key"
+scope = "account-personal"
+
+# A separate account; scope defaults to the key id when omitted.
+[[keys]]
+id = "go-second-account"
+key_file = "keys/go-second-account.key"
